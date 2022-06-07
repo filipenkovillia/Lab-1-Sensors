@@ -7,16 +7,16 @@ namespace Lab_1_Sensors
     {
         private static Random rand = new Random();
 
-        internal static bool[][] GeneratePassportDescriptions()
+        internal static bool[][] GeneratePassportDescriptions(int numberOfSensors, int numberOfCharacteristics)
         {
-            bool[][] passportDescriptions = new bool[GlobalConsts.NumberOfSensors][];
+            bool[][] passportDescriptions = new bool[numberOfSensors][];
 
-            for (int i = 0; i < GlobalConsts.NumberOfSensors; i++)
+            for (int i = 0; i < numberOfSensors; i++)
             {
-                passportDescriptions[i] = new bool[GlobalConsts.NumberOfCharacteristics];
+                passportDescriptions[i] = new bool[numberOfCharacteristics];
                 // Default characteristic is mandatory
                 passportDescriptions[i][0] = true;
-                for (int j = 1; j < GlobalConsts.NumberOfCharacteristics; j++)
+                for (int j = 1; j < numberOfCharacteristics; j++)
                 {
                     int boolean = rand.Next(2);
                     passportDescriptions[i][j] = boolean == 1;
@@ -26,11 +26,38 @@ namespace Lab_1_Sensors
             return passportDescriptions;
         }
 
-        internal static double[] GenerateUpperValues()
+        internal static bool[][] GenerateCharacteristicDescriptions(int numberOfCharacteristics, int numberOfSensors)
         {
-            double[] upperValues = new double[GlobalConsts.NumberOfCharacteristics];
+            bool[][] result = new bool[numberOfCharacteristics][];
 
-            for (int i = 0; i < GlobalConsts.NumberOfSensors; i++)
+            for (int i = 0; i < numberOfCharacteristics; i++)
+            {
+                result[i] = new bool[numberOfSensors];
+                if (i == 0)
+                {
+                    for(int j = 0; j < numberOfSensors; j++)
+                    {
+                        result[i][j] = true;
+                    }
+                }
+                else
+                {
+                    for (int j = 1; j < numberOfSensors; j++)
+                    {
+                        int boolean = rand.Next(2);
+                        result[i][j] = boolean == 1;
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        internal static double[] GenerateUpperValues(int numberOfSensors)
+        {
+            double[] upperValues = new double[numberOfSensors];
+
+            for (int i = 0; i < numberOfSensors; i++)
             {
                 upperValues[i] = rand.Next(GlobalConsts.SensorMinValue, GlobalConsts.SensorMaxValue + 1);
             }
@@ -38,11 +65,11 @@ namespace Lab_1_Sensors
             return upperValues;
         }
 
-        internal static double[] GenerateLowerValues()
+        internal static double[] GenerateLowerValues(int numberOfSensors)
         {
-            double[] lowerValues = new double[GlobalConsts.NumberOfCharacteristics];
+            double[] lowerValues = new double[numberOfSensors];
 
-            for (int i = 0; i < GlobalConsts.NumberOfSensors; i++)
+            for (int i = 0; i < numberOfSensors; i++)
             {
                 lowerValues[i] = rand.Next(GlobalConsts.SensorMinValue);
             }
@@ -50,11 +77,11 @@ namespace Lab_1_Sensors
             return lowerValues;
         }
 
-        internal static double[] GenerateCriticalValues()
+        internal static double[] GenerateCriticalValues(int numberOfSensors)
         {
-            double[] criticalValues = new double[GlobalConsts.NumberOfCharacteristics];
+            double[] criticalValues = new double[numberOfSensors];
 
-            for (int i = 0; i < GlobalConsts.NumberOfSensors; i++)
+            for (int i = 0; i < numberOfSensors; i++)
             {
                 criticalValues[i] = Math.Round(rand.Next(GlobalConsts.SensorMinValue + 1) * 0.1, 1);
             }
@@ -62,14 +89,27 @@ namespace Lab_1_Sensors
             return criticalValues;
         }
 
-        internal static double[][] GenerateEmptyCurrentValues(bool[][] passportDescriptions)
+        internal static double[][] GenerateEmptyCurrentValues(bool[][] passportDescriptions, int numberOfSensors)
         {
-            double[][] currentValues = new double[GlobalConsts.NumberOfCharacteristics][];
+            double[][] currentValues = new double[numberOfSensors][];
 
-            for (int i = 0; i < GlobalConsts.NumberOfSensors; i++)
+            for (int i = 0; i < numberOfSensors; i++)
             {
                 int numberOfCharacteristics = passportDescriptions[i].Count(des => des);
                 currentValues[i] = new double[numberOfCharacteristics];
+            }
+
+            return currentValues;
+        }
+
+        internal static double[][] GenerateEmptyCharacteristicCurrentValues(bool[][] passportDescriptions, int numberOfCharacteristics)
+        {
+            double[][] currentValues = new double[numberOfCharacteristics][];
+
+            for (int i = 0; i < numberOfCharacteristics; i++)
+            {
+                int numberOfSensors = passportDescriptions[i].Count(des => des);
+                currentValues[i] = new double[numberOfSensors];
             }
 
             return currentValues;

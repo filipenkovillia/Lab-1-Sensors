@@ -5,6 +5,8 @@ namespace Lab_1_Sensors
 {
     internal class PassportHandler
     {
+        private const int NumberOfSensors = 10;
+
         private bool[][] _passportDescriptions;
         private double[] _upperValues;
         private double[] _lowerValues;
@@ -15,11 +17,11 @@ namespace Lab_1_Sensors
         internal PassportHandler()
         {
             _characteristics = CharacteristicCreator.CreateCharacteristics();
-            _passportDescriptions = InputValuesGenerator.GeneratePassportDescriptions();
-            _upperValues = InputValuesGenerator.GenerateUpperValues();
-            _lowerValues = InputValuesGenerator.GenerateLowerValues();
-            _criticalValues = InputValuesGenerator.GenerateCriticalValues();
-            _currentValues = InputValuesGenerator.GenerateEmptyCurrentValues(_passportDescriptions);
+            _passportDescriptions = InputValuesGenerator.GeneratePassportDescriptions(NumberOfSensors, GlobalConsts.NumberOfCharacteristics);
+            _upperValues = InputValuesGenerator.GenerateUpperValues(NumberOfSensors);
+            _lowerValues = InputValuesGenerator.GenerateLowerValues(NumberOfSensors);
+            _criticalValues = InputValuesGenerator.GenerateCriticalValues(NumberOfSensors);
+            _currentValues = InputValuesGenerator.GenerateEmptyCurrentValues(_passportDescriptions, NumberOfSensors);
         }
 
         internal void CyclicalMethod()
@@ -27,7 +29,7 @@ namespace Lab_1_Sensors
             int currentSensor = 0;
             int time = 0;
             List<LogInfo> logInfoList = new List<LogInfo>();
-            while (currentSensor < GlobalConsts.NumberOfSensors)
+            while (currentSensor < NumberOfSensors)
             {
                 HandleSensor(currentSensor, time, logInfoList);
                 currentSensor++;
@@ -47,20 +49,20 @@ namespace Lab_1_Sensors
 
             if (sensorValue > _upperValues[sensorId])
             {
-                LogInfo newLog = new LogInfo(sensorId, time, sensorValue, _lowerValues[sensorId], _upperValues[sensorId]);
+                LogInfo newLog = new LogInfo(sensorId, time, sensorValue, _lowerValues[sensorId], _upperValues[sensorId], _criticalValues[sensorId]);
                 logInfoList.Add(newLog);
                 if (sensorValue > _upperValues[sensorId] + _criticalValues[sensorId])
                 {
-                    newLog.PrintCriticalLogInfo();
+                    newLog.PrintLogInfo();
                 }
             }
             else if (sensorValue < _lowerValues[sensorId])
             {
-                LogInfo newLog = new LogInfo(sensorId, time, sensorValue, _lowerValues[sensorId], _upperValues[sensorId]);
+                LogInfo newLog = new LogInfo(sensorId, time, sensorValue, _lowerValues[sensorId], _upperValues[sensorId], _criticalValues[sensorId]);
                 logInfoList.Add(newLog);
                 if (sensorValue < _lowerValues[sensorId] - _criticalValues[sensorId])
                 {
-                    newLog.PrintCriticalLogInfo();
+                    newLog.PrintLogInfo();
                 }
             }
 
