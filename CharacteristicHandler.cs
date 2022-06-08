@@ -53,10 +53,10 @@ namespace Lab_1_Sensors
             SaveSensorValue(sensorId, sensorValue);
         }
 
-        public void AddressMethod()
+        public void AddressMethod(int timePeriod)
         {
             int seconds = 0;
-            while (seconds < 100)
+            while (seconds < timePeriod)
             {
                 List<LogInfo> logInfoList = new List<LogInfo>();
                 List<Sensor> currentSensors = _sensorList.Where(sensor => seconds % sensor.Period == 0)

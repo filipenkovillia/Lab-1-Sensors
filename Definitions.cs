@@ -2,7 +2,6 @@
 {
     public static class GlobalConsts
     {
-        
         public const int NumberOfCharacteristics = 10;
         public const int SensorMinValue = 10;
         public const int SensorMaxValue = 30;
